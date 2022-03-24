@@ -115,10 +115,40 @@
 	scl-gpios = <&gpio5 16 GPIO_ACTIVE_HIGH>;
 	sda-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
 	status = "okay";
+#if 1
+	ovm7695_mipi1: ovm7695_mipi1@21 {
+		compatible = "ovti,ovm7695_mipi";
+		reg = <0x21>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_csi1>;
+		clocks = <&clk IMX8MM_CLK_CLKO1>;
+		clock-names = "csi_mclk";
+/* Disabled CLKO2, since VAR-SOM-MX8M-MINI camera expansion board uses
+ * its own oscillator. Enable CLK02 if your design requires it
+ */
+#if 0
+		assigned-clocks = <&clk IMX8MM_CLK_CLKO1>;
+		assigned-clock-parents = <&clk IMX8MM_CLK_24M>;
+		assigned-clock-rates = <24000000>;
+#endif
+		pwn-gpios = <&gpio5 12 GPIO_ACTIVE_HIGH>;
+		rst-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+		mclk = <24000000>;
+		mclk_source = <0>;
+		status = "okay";
 
-	ov5640_mipi1: ov5640_mipi1@3c {
-		compatible = "ovti,ov5640_mipi";
-		reg = <0x3c>;
+		port {
+			ovm7695_mipi1_ep: endpoint {
+				remote-endpoint = <&mipi1_sensor_ep>;
+			};
+		};
+	};
+#endif
+
+#if 0
+	ochsa10_mipi1: ochsa10_mipi1@36 {
+		compatible = "ovti,ochsa10_mipi";
+		reg = <0x36>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_csi1>;
 		clocks = <&clk IMX8MM_CLK_CLKO1>;
@@ -139,11 +169,12 @@
 		status = "okay";
 
 		port {
-			ov5640_mipi1_ep: endpoint {
+			ochsa10_mipi1_ep: endpoint {
 				remote-endpoint = <&mipi1_sensor_ep>;
 			};
 		};
 	};
+#endif
 
 	/* GPIO expander */
 	pca9534: gpio@20 {
@@ -229,10 +260,15 @@
 
 	port {
 		mipi1_sensor_ep: endpoint@1 {
-			remote-endpoint = <&ov5640_mipi1_ep>;
-			data-lanes = <2>;
-			csis-hs-settle = <13>;
-			csis-clk-settle = <2>;
+#if 1
+			remote-endpoint = <&ovm7695_mipi1_ep>;
+#else
+			remote-endpoint = <&ochsa10_mipi1_ep>;
+#endif
+			data-lanes = <1>;
+			//TODO(Ks) check settle settings
+			csis-hs-settle = <3>;
+			csis-clk-settle = <0>;
 			csis-wclk;
 		};
 

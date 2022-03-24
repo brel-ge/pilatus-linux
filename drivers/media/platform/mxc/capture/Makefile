@@ -29,6 +29,13 @@ obj-$(CONFIG_MXC_CAMERA_OV5640_MIPI) += ov5640_camera_mipi_int.o
 ov5640_camera_mipi_v2-objs := ov5640_mipi_v2.o
 obj-$(CONFIG_MXC_CAMERA_OV5640_MIPI_V2) += ov5640_camera_mipi_v2.o
 
+# Used for pilatus
+ovm7695_mipi-objs := ovm7695_mipi.o
+obj-$(CONFIG_MXC_CAMERA_OVM7695_MIPI) += ovm7695_mipi.o
+
+ochsa10_mipi-objs := ochsa10_mipi.o
+obj-$(CONFIG_MXC_CAMERA_OCHSA10_MIPI) += ochsa10_mipi.o
+
 ov5647_camera_mipi-objs := ov5647_mipi.o
 obj-$(CONFIG_MXC_CAMERA_OV5647_MIPI) += ov5647_camera_mipi.o
 
