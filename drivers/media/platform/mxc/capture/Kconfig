@@ -61,6 +61,18 @@ config MXC_CAMERA_OV5640_MIPI_V2
 	help
 	  If you plan to use the ov5640 Camera with mipi interface in your MXC system, say Y here.
 
+config MXC_CAMERA_OVM7695_MIPI
+	tristate "OmniVision ovm7695 camera support using mipi"
+	depends on MXC_MIPI_CSI && I2C
+	help
+	  If you plan to use the ovm7695 Camera with mipi interface in your MXC system, say Y here.
+
+config MXC_CAMERA_OCHSA10_MIPI
+	tristate "OmniVision ochsa10 camera support using mipi"
+	depends on MXC_MIPI_CSI && I2C
+	help
+	  If you plan to use the ochsa10 Camera with mipi interface in your MXC system, say Y here.
+
 config MXC_CAMERA_OV5647_MIPI
 	tristate "OmniVision ov5647 camera support using mipi"
 	depends on MXC_MIPI_CSI && I2C
