@@ -331,6 +331,8 @@ static struct reg_value ovm7695_setting_init[] = {
 };
 
 static struct reg_value ovm7695_setting_uyvy[] = {
+	// PLL
+	{ 0x4300, 0x3F, 0, 0},
 	{ 0x030B, 0x02, 0, 0},
 	{ 0x3106, 0x92, 0, 0 }, // YUV422
 };
@@ -343,8 +345,8 @@ static struct reg_value ovm7695_setting_raw[] = {
 };
 
 static struct ovm7695_mode_info ovm7695_mode_info_data[ovm7695_mode_MAX + 1] = {
-	{ ovm7695_mode_VGA_640_480, 640, 480, ovm7695_setting_uyvy,
-	  ARRAY_SIZE(ovm7695_setting_uyvy) },
+	{ ovm7695_mode_VGA_640_480, 640, 480, ovm7695_setting_raw,
+	  ARRAY_SIZE(ovm7695_setting_raw) },
 };
 
 static struct regulator *io_regulator;
@@ -713,8 +715,8 @@ static int ovm7695_init_mode(struct ovm7695 *sensor, enum ovm7695_mode mode,
 		if (retval < 0)
 			goto err;
 
-		pModeSetting = ovm7695_setting_uyvy;
-		ArySize = ARRAY_SIZE(ovm7695_setting_uyvy);
+		pModeSetting = ovm7695_setting_raw;
+		ArySize = ARRAY_SIZE(ovm7695_setting_raw);
 		retval = ovm7695_download_firmware(sensor, pModeSetting,
 						   ArySize);
 	} else {
@@ -905,11 +907,14 @@ static int ovm7695_set_fmt(struct v4l2_subdev *sd,
 	const struct ovm7695_datafmt *fmt = ovm7695_find_datafmt(mf->code);
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct ovm7695 *sensor = to_ovm7695(client);
+	struct device *dev = &sensor->i2c_client->dev;
 	int capturemode;
 	u8 sys_clk_div = 0x02; 
 	u8 yuv_select = 0x92; 
 	u8 fmt_ctrl = 0x3f;
+	u8 no_idea = 0x61;
 
+	dev_info(dev, "set_fmt");
 	if (!fmt) {
 		mf->code = ovm7695_colour_fmts[0].code;
 		mf->colorspace = ovm7695_colour_fmts[0].colorspace;
@@ -921,34 +926,44 @@ static int ovm7695_set_fmt(struct v4l2_subdev *sd,
 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
 		return 0;
 
+	dev_info(dev, "set_fmt_1");
 	sensor->fmt = fmt;
 
 	capturemode = get_capturemode(mf->width, mf->height);
 	if (capturemode >= 0) {
+		u8 val;
 		sensor->streamcap.capturemode = capturemode;
 		sensor->pix.width = mf->width;
 		sensor->pix.height = mf->height;
+		dev_info(dev, "set_fmt_2");
+
+	        ovm7695_read_reg(sensor, 0x301e, &val);
+		dev_info(dev, "reg 0x301e: %x", val);
+	 
+		switch(fmt->code){
+			default:
+			case MEDIA_BUS_FMT_YUYV8_2X8:
+				dev_info(dev, "set yuv");
+				sys_clk_div = 0x02;
+				yuv_select = 0x92;
+				fmt_ctrl = 0x3f;
+				no_idea = 0x61;
+				break;
+			case MEDIA_BUS_FMT_SBGGR8_1X8:
+				dev_info(dev, "set raw");
+				sys_clk_div = 0x04;
+				yuv_select = 0x91;
+				fmt_ctrl = 0xf8;
+				no_idea = 0x60;
+				break;
+		};
+				
+		ovm7695_write_reg(sensor, 0x4300, fmt_ctrl);
+		ovm7695_write_reg(sensor, 0x030b, sys_clk_div);
+		ovm7695_write_reg(sensor, 0x3106, yuv_select);
+		ovm7695_write_reg(sensor, 0x301e, no_idea);
 		return 0;
 	}
- 
-	switch(fmt->code){
-		default:
-		case MEDIA_BUS_FMT_YUYV8_2X8:
-			sys_clk_div = 0x02;
-			yuv_select = 0x92;
-			fmt_ctrl = 0x3f;
-			break;
-		case MEDIA_BUS_FMT_SBGGR8_1X8:
-			sys_clk_div = 0x04;
-			yuv_select = 0x91;
-			fmt_ctrl = 0xf8;
-	                ovm7695_write_reg(sensor, 0x301e, 0x60);
-			break;
-	};
-			
-	ovm7695_write_reg(sensor, 0x4300, fmt_ctrl);
-	ovm7695_write_reg(sensor, 0x030b, sys_clk_div);
-	ovm7695_write_reg(sensor, 0x3106, yuv_select);
 
 	dev_err(&client->dev, "Set format failed %d, %d\n", fmt->code,
 		fmt->colorspace);
