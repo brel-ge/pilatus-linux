@@ -175,6 +175,41 @@
 		};
 	};
 #endif
+	pac193x@10 {
+		compatible = "microchip,pac1934";
+		reg = <0x10>;
+		samp-rate = <8>;
+	        status = "okay";
+
+		ch1: channel@0 {
+		     uohms-shunt-res = <330000>;
+		     rail-name = "CAM_POWER";
+		     subsys-name = "display";
+		     channel_enabled;
+		};
+
+		ch2: channel@1 {
+		     uohms-shunt-res = <100000>;
+		     rail-name = "3V3";
+		     subsys-name = "display";
+		     channel_enabled;
+		};
+
+		ch3: channel@2 {
+		     uohms-shunt-res = <100000>;
+		     rail-name = "1V8";
+		     subsys-name = "display";
+		     channel_enabled;
+		};
+
+		ch4: channel@3 {
+		     uohms-shunt-res = <100000>;
+		     rail-name = "5V";
+		     subsys-name = "display";
+		     channel_enabled;
+		};
+	};
+
 
 	/* GPIO expander */
 	pca9534: gpio@20 {
