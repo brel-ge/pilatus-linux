@@ -37,6 +37,7 @@ obj-y += orientation/
 obj-y += position/
 obj-y += potentiometer/
 obj-y += potentiostat/
+obj-y += power/
 obj-y += pressure/
 obj-y += proximity/
 obj-y += resolver/
