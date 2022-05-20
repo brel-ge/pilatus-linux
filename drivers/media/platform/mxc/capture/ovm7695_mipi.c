@@ -345,8 +345,8 @@ static struct reg_value ovm7695_setting_raw[] = {
 };
 
 static struct ovm7695_mode_info ovm7695_mode_info_data[ovm7695_mode_MAX + 1] = {
-	{ ovm7695_mode_VGA_640_480, 640, 480, ovm7695_setting_raw,
-	  ARRAY_SIZE(ovm7695_setting_raw) },
+	{ ovm7695_mode_VGA_640_480, 640, 480, ovm7695_setting_uyvy,
+	  ARRAY_SIZE(ovm7695_setting_uyvy) },
 };
 
 static struct regulator *io_regulator;
@@ -392,7 +392,7 @@ static struct i2c_driver ovm7695_i2c_driver = {
 
 static const struct ovm7695_datafmt ovm7695_colour_fmts[] = {
 	{ MEDIA_BUS_FMT_YUYV8_2X8, V4L2_COLORSPACE_JPEG },
-	{ MEDIA_BUS_FMT_SBGGR8_1X8, V4L2_COLORSPACE_SRGB },
+//	{ MEDIA_BUS_FMT_SBGGR8_1X8, V4L2_COLORSPACE_SRGB },
 };
 
 static int get_capturemode(int width, int height)
@@ -715,8 +715,8 @@ static int ovm7695_init_mode(struct ovm7695 *sensor, enum ovm7695_mode mode,
 		if (retval < 0)
 			goto err;
 
-		pModeSetting = ovm7695_setting_raw;
-		ArySize = ARRAY_SIZE(ovm7695_setting_raw);
+		pModeSetting = ovm7695_setting_uyvy;
+		ArySize = ARRAY_SIZE(ovm7695_setting_uyvy);
 		retval = ovm7695_download_firmware(sensor, pModeSetting,
 						   ArySize);
 	} else {

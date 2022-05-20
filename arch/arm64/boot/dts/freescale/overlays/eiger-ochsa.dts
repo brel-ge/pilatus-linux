@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (C) 2022 Bruetsch Elektronik AG
+ * Author: Uwe Kaiser <uwe.kaiser@brel.ch>
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			overlay-description = "Pilatus OCHSA10";
+		};
+	};
+};

@@ -165,15 +165,15 @@ static struct reg_value ochsa10_setting_init[] = {
 	{ 0x0303, 0x06, 0 , 0},
 	{ 0x0304, 0x01, 0 , 0},
 	{ 0x0305, 0x90, 0 , 0},
-	{ 0x0306, 0x00, 0 , 0},
+	//{ 0x0306, 0x00, 0 , 0},
+	{ 0x0306, 0x01, 0 , 0},
 	{ 0x0308, 0x01, 0 , 0},
+	//{ 0x0309, 0x00, 0 , 0},
 	{ 0x0309, 0x00, 0 , 0},
-	// { 0x030c, 0x01, 0 , 0},
-	{ 0x030c, 0x02, 0 , 0},
+	{ 0x030c, 0x01, 0 , 0},
 
 	// PLL2
-	// { 0x0322, 0x01, 0 , 0},
-	{ 0x0322, 0x02, 0 , 0},
+	{ 0x0322, 0x01, 0 , 0},
 	{ 0x0323, 0x06, 0 , 0},
 	{ 0x0324, 0x01, 0 , 0},
 	{ 0x0325, 0x68, 0 , 0},
@@ -182,11 +182,16 @@ static struct reg_value ochsa10_setting_init[] = {
 	{ 0x301e, 0xf0, 0 , 0},
 	{ 0x3022, 0x41, 0 , 0}, // 8-bit mode
 	// { 0x3501, 0x03, 0 , 0},
-	{ 0x3501, 0x00, 0 , 0},
-	{ 0x3502, 0x78, 0 , 0},
+	
+	{ 0x3501, 0x03, 0 , 0},
+	{ 0x3502, 0x00, 0 , 0},
+
 	{ 0x3504, 0x0c, 0 , 0},
-	{ 0x3508, 0x01, 0 , 0},
+	{ 0x3508, 0x06, 0 , 0},
 	{ 0x3509, 0x00, 0 , 0},
+
+	{ 0x3505, 0x01, 0 , 0}, // Manual exposure
+
 	{ 0x3601, 0xc0, 0 , 0},
 	{ 0x3603, 0x71, 0 , 0},
 	{ 0x3610, 0x68, 0 , 0},
@@ -234,18 +239,26 @@ static struct reg_value ochsa10_setting_init[] = {
 	{ 0x3801, 0x00, 0 , 0},
 	{ 0x3802, 0x00, 0 , 0},
 	{ 0x3803, 0x00, 0 , 0},
-	{ 0x3804, 0x05, 0 , 0},
+	// { 0x3804, 0x03, 0 , 0}, // x addr end
+	// { 0x3805, 0x27, 0 , 0},
+	{ 0x3804, 0x05, 0 , 0}, // x addr end
 	{ 0x3805, 0x0f, 0 , 0},
-	{ 0x3806, 0x03, 0 , 0},
+	{ 0x3806, 0x03, 0 , 0}, // y addr end
 	{ 0x3807, 0x2f, 0 , 0},
-	{ 0x3808, 0x05, 0 , 0},
-	{ 0x3809, 0x00, 0 , 0},
+	
+	//{ 0x3808, 0x05, 0 , 0}, // 0x500 = 1280
+	//{ 0x3809, 0x00, 0 , 0},
+	{ 0x3808, 0x03, 0 , 0}, // 0x320 = 800
+	{ 0x3809, 0x20, 0 , 0},
+
 	{ 0x380a, 0x03, 0 , 0},
 	{ 0x380b, 0x20, 0 , 0},
-	{ 0x380c, 0x02, 0 , 0},
-	{ 0x380d, 0xe8, 0 , 0},
-	{ 0x380e, 0x03, 0 , 0},
+
+	{ 0x380c, 0x03, 0 , 0}, // HTS 896
+	{ 0x380d, 0x80, 0 , 0},
+	{ 0x380e, 0x03, 0 , 0}, // VTS 896
 	{ 0x380f, 0x80, 0 , 0},
+
 	{ 0x3810, 0x00, 0 , 0},
 	{ 0x3811, 0x09, 0 , 0},
 	{ 0x3812, 0x00, 0 , 0},
@@ -876,8 +889,6 @@ static int ochsa10_set_fmt(struct v4l2_subdev *sd,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct ochsa10 *sensor = to_ochsa10(client);
 	int capturemode;
-	u8 sys_clk_div = 0x02; 
-	u8 yuv_select = 0x92; 
 
 	if (!fmt) {
 		mf->code = ochsa10_colour_fmts[0].code;
@@ -900,21 +911,6 @@ static int ochsa10_set_fmt(struct v4l2_subdev *sd,
 		return 0;
 	}
  
-	switch(fmt->code){
-		default:
-		case MEDIA_BUS_FMT_YUYV8_2X8:
-			sys_clk_div = 0x02;
-			yuv_select = 0x92;
-			break;
-		case MEDIA_BUS_FMT_SBGGR8_1X8:
-			sys_clk_div = 0x04;
-			yuv_select = 0x91;
-			break;
-	};
-			
-	ochsa10_write_reg(sensor, 0x030b, sys_clk_div);
-	ochsa10_write_reg(sensor, 0x3106, yuv_select);
-
 	dev_err(&client->dev, "Set format failed %d, %d\n", fmt->code,
 		fmt->colorspace);
 	return -EINVAL;

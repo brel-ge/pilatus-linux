@@ -1,0 +1,91 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (C) 2022 Bruetsch Elektronik AG
+ * Author: Uwe Kaiser <uwe.kaiser@brel.ch>
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include "../imx8mm-pinfunc.h"
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@4 {
+		target-path = "/";
+		__overlay__ {
+			overlay-description = "Pilatus OVM7695";
+		};
+	};
+
+};
+
+&iomuxc {
+        pinctrl-names = "default";
+
+	pinctrl_csi1: csi1grp {
+		fsl,pins = <
+			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13		0x19 /* CAM_RST */
+			MX8MM_IOMUXC_ECSPI2_MISO_GPIO5_IO12		0x19 /* CAM_PWR */
+			MX8MM_IOMUXC_SAI1_RXD3_GPIO4_IO5		0x19 /* CAM_BUF */
+		>;
+	};
+};
+
+&i2c2 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	ovm7695_mipi1: ovm7695_mipi1@21 {
+		compatible = "ovti,ovm7695_mipi";
+		reg = <0x21>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_csi1>;
+		//clocks = <&clk IMX8MM_CLK_CLKO1>;
+		//clock-names = "csi_mclk";
+
+		pwn-gpios = <&gpio5 12 GPIO_ACTIVE_HIGH>;
+		rst-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+		mclk = <24000000>;
+		mclk_source = <0>;
+		status = "okay";
+
+		port {
+			ovm7695_mipi1_ep: endpoint {
+				remote-endpoint = <&mipi1_sensor_ep>;
+			};
+		};
+	};
+};
+
+
+&mipi_csi_1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	port {
+		mipi1_sensor_ep: endpoint@1 {
+			remote-endpoint = <&ovm7695_mipi1_ep>;
+			csis-hs-settle = <3>;
+			data-lanes = <1>;
+			csis-clk-settle = <0>;
+			csis-wclk;
+		};
+
+		csi1_mipi_ep: endpoint@2 {
+			remote-endpoint = <&csi1_ep>;
+		};
+	};
+};
+
+&csi1_bridge {
+	fsl,mipi-mode;
+	status = "okay";
+
+	port {
+		csi1_ep: endpoint {
+			remote-endpoint = <&csi1_mipi_ep>;
+		};
+	};
+};
+

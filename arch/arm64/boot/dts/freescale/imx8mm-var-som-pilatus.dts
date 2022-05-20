@@ -297,12 +297,12 @@
 		mipi1_sensor_ep: endpoint@1 {
 #if 1
 			remote-endpoint = <&ovm7695_mipi1_ep>;
+			csis-hs-settle = <3>;
 #else
 			remote-endpoint = <&ochsa10_mipi1_ep>;
+			csis-hs-settle = <6>;
 #endif
 			data-lanes = <1>;
-			//TODO(Ks) check settle settings
-			csis-hs-settle = <3>;
 			csis-clk-settle = <0>;
 			csis-wclk;
 		};
