@@ -36,6 +36,9 @@ obj-$(CONFIG_MXC_CAMERA_OVM7695_MIPI) += ovm7695_mipi.o
 ochsa10_mipi-objs := ochsa10_mipi.o
 obj-$(CONFIG_MXC_CAMERA_OCHSA10_MIPI) += ochsa10_mipi.o
 
+eiger_stub_mipi-objs := eiger_stub_mipi.o
+obj-$(CONFIG_MXC_CAMERA_EIGER_STUB_MIPI) += eiger_stub_mipi.o
+
 ov5647_camera_mipi-objs := ov5647_mipi.o
 obj-$(CONFIG_MXC_CAMERA_OV5647_MIPI) += ov5647_camera_mipi.o
 

@@ -115,12 +115,12 @@
 	scl-gpios = <&gpio5 16 GPIO_ACTIVE_HIGH>;
 	sda-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
 	status = "okay";
-#if 1
-	ovm7695_mipi1: ovm7695_mipi1@21 {
-		compatible = "ovti,ovm7695_mipi";
-		reg = <0x21>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_csi1>;
+
+
+	//TODO add EigerStub
+        eiger_stub_mipi: eiger_stib_mipi@12 {
+		compatible = "brel,eiger_stub_mipi";
+		reg = <0x12>;
 		clocks = <&clk IMX8MM_CLK_CLKO1>;
 		clock-names = "csi_mclk";
 /* Disabled CLKO2, since VAR-SOM-MX8M-MINI camera expansion board uses
@@ -131,50 +131,18 @@
 		assigned-clock-parents = <&clk IMX8MM_CLK_24M>;
 		assigned-clock-rates = <24000000>;
 #endif
-		pwn-gpios = <&gpio5 12 GPIO_ACTIVE_HIGH>;
-		rst-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+
 		mclk = <24000000>;
 		mclk_source = <0>;
 		status = "okay";
 
 		port {
-			ovm7695_mipi1_ep: endpoint {
+			eiger_stub_mipi_ep: endpoint {
 				remote-endpoint = <&mipi1_sensor_ep>;
 			};
 		};
 	};
-#endif
 
-#if 0
-	ochsa10_mipi1: ochsa10_mipi1@36 {
-		compatible = "ovti,ochsa10_mipi";
-		reg = <0x36>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_csi1>;
-		clocks = <&clk IMX8MM_CLK_CLKO1>;
-		clock-names = "csi_mclk";
-/* Disabled CLKO2, since VAR-SOM-MX8M-MINI camera expansion board uses
- * its own oscillator. Enable CLK02 if your design requires it
- */
-#if 0
-		assigned-clocks = <&clk IMX8MM_CLK_CLKO1>;
-		assigned-clock-parents = <&clk IMX8MM_CLK_24M>;
-		assigned-clock-rates = <24000000>;
-#endif
-		csi_id = <0>;
-		pwn-gpios = <&gpio5 12 GPIO_ACTIVE_HIGH>;
-		rst-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
-		mclk = <24000000>;
-		mclk_source = <0>;
-		status = "okay";
-
-		port {
-			ochsa10_mipi1_ep: endpoint {
-				remote-endpoint = <&mipi1_sensor_ep>;
-			};
-		};
-	};
-#endif
 	pac193x@10 {
 		compatible = "microchip,pac1934";
 		reg = <0x10>;
@@ -294,18 +262,24 @@
 	status = "okay";
 
 	port {
+
 		mipi1_sensor_ep: endpoint@1 {
-#if 1
-			remote-endpoint = <&ovm7695_mipi1_ep>;
-#else
-			remote-endpoint = <&ochsa10_mipi1_ep>;
-#endif
+			remote-endpoint = <&eiger_stub_mipi_ep>;
 			data-lanes = <1>;
 			//TODO(Ks) check settle settings
-			csis-hs-settle = <3>;
-			csis-clk-settle = <0>;
+#if 1
+			// OVM7695
+			csis-hs-settle = <6>;
+			csis-clk-settle = <2>;
+#else
+
+			//OCHSA
+			csis-hs-settle = <17>;
+			csis-clk-settle = <2>;
+#endif
 			csis-wclk;
 		};
+
 
 		csi1_mipi_ep: endpoint@2 {
 			remote-endpoint = <&csi1_ep>;
@@ -421,6 +395,8 @@
 	status = "okay";
 };
 
+/*
+
 &gpio4 {
 	cam_buf_hog {
 		gpio-hog;
@@ -429,6 +405,8 @@
 		line-name = "cam_buf_en";
 	};
 };
+*/
+
 
 &snvs_pwrkey {
 	status = "okay";
@@ -439,6 +417,20 @@
 };
 
 &iomuxc {
+        pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_hog>;
+
+	pinctrl_hog: hoggrp {
+		fsl,pins = <
+			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13		0x19 /* CAM_RST */
+			MX8MM_IOMUXC_GPIO1_IO08_GPIO1_IO8		0x140 /* CAM_OPT */
+			MX8MM_IOMUXC_ECSPI2_SCLK_GPIO5_IO10		0x19 /* CAM_TRIGGER */
+			MX8MM_IOMUXC_ECSPI2_MOSI_GPIO5_IO11		0x19 /* CAM_SYNC */
+			MX8MM_IOMUXC_ECSPI2_MISO_GPIO5_IO12		0x19 /* CAM_PWR */
+			MX8MM_IOMUXC_SAI1_RXD3_GPIO4_IO5		0x19 /* CAM_BUF */
+		>;
+	};
+
 	pinctrl_i2c2: i2c2grp {
 		fsl,pins = <
 			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL			0x400001c3
@@ -566,13 +558,6 @@
 		>;
 	};
 
-	pinctrl_csi1: csi1grp {
-		fsl,pins = <
-			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13		0x19 /* CAM_RST */
-			MX8MM_IOMUXC_ECSPI2_MISO_GPIO5_IO12		0x19 /* CAM_PWR */
-			MX8MM_IOMUXC_SAI1_RXD3_GPIO4_IO5		0x19 /* CAM_BUF */
-		>;
-	};
 
 	pinctrl_pca9534: pca9534grp {
 		fsl,pins = <
