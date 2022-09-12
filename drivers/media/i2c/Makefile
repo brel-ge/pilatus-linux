@@ -118,8 +118,6 @@ obj-$(CONFIG_VIDEO_SONY_BTF_MPX) += sony-btf-mpx.o
 obj-$(CONFIG_VIDEO_SR030PC30) += sr030pc30.o
 obj-$(CONFIG_VIDEO_MT9M114) += mt9m114.o
 obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
-obj-$(CONFIG_VIDEO_TC358743) += tc358743.o
-obj-$(CONFIG_VIDEO_TDA1997X) += tda1997x.o
 obj-$(CONFIG_VIDEO_TDA7432) += tda7432.o
 obj-$(CONFIG_VIDEO_TDA9840) += tda9840.o
 obj-$(CONFIG_VIDEO_TEA6415C) += tea6415c.o
@@ -144,3 +142,5 @@ obj-$(CONFIG_VIDEO_VS6624) += vs6624.o
 obj-$(CONFIG_VIDEO_WM8739) += wm8739.o
 obj-$(CONFIG_VIDEO_WM8775) += wm8775.o
 obj-$(CONFIG_VIDEO_AP1302)     += ap1302.o
+obj-$(CONFIG_VIDEO_EIGER_STUB) += eiger_stub.o
+
