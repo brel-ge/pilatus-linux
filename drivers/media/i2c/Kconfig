@@ -1390,6 +1390,16 @@ config VIDEO_S5C73M3
 	  This is a V4L2 sensor driver for Samsung S5C73M3
 	  8 Mpixel camera.
 
+config VIDEO_EIGER_STUB
+	tristate "Eiger camera support using"
+	depends on OF
+	depends on GPIOLIB && VIDEO_V4L2 && I2C
+	select MEDIA_CONTROLLER
+	select VIDEO_V4L2_SUBDEV_API
+	select V4L2_FWNODE
+	help
+	  If you plan to use the Eiger Camera with your system, say Y here.
+
 endmenu
 
 menu "Lens drivers"
