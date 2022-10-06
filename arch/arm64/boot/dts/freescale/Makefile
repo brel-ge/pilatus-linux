@@ -398,6 +398,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-dart-wbe-sonata.dtb \
 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus.dtb 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-variscite.dtb 
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-inputech.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-marelcom.dtb
 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
