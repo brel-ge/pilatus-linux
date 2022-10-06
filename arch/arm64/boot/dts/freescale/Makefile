@@ -239,6 +239,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-som-wbe-symphony-m7.dtb
 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus.dtb 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-variscite.dtb 
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-marelcom.dtb
 
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
