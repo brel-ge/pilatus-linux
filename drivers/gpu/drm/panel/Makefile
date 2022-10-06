@@ -39,6 +39,7 @@ obj-$(CONFIG_DRM_PANEL_ONTAT_KD50G21_40NT_A1) += panel-ontat-kd50g21-40nt-a1.o
 obj-$(CONFIG_DRM_PANEL_ORISETECH_OTM8009A) += panel-orisetech-otm8009a.o
 obj-$(CONFIG_DRM_PANEL_OSD_OSD101T2587_53TS) += panel-osd-osd101t2587-53ts.o
 obj-$(CONFIG_DRM_PANEL_PANASONIC_VVX10F034N00) += panel-panasonic-vvx10f034n00.o
+obj-$(CONFIG_DRM_PANEL_PILATUS_INPUTECH) += panel-pilatus-inputech.o
 obj-$(CONFIG_DRM_PANEL_PILATUS_MARELCOM) += panel-pilatus-marelcom.o
 obj-$(CONFIG_DRM_PANEL_RASPBERRYPI_TOUCHSCREEN) += panel-raspberrypi-touchscreen.o
 obj-$(CONFIG_DRM_PANEL_RAYDIUM_RM67191) += panel-raydium-rm67191.o
