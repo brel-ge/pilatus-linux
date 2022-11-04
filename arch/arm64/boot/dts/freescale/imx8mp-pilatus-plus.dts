@@ -249,8 +249,8 @@
 	        status = "okay";
 
 		ch1: channel@0 {
-		     uohms-shunt-res = <330000>;
-		     rail-name = "CAM_POWER";
+		     uohms-shunt-res = <100000>;
+		     rail-name = "CAM";
 		     subsys-name = "display";
 		     channel_enabled;
 		};
