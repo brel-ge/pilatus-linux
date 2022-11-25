@@ -86,15 +86,6 @@
 		reg = <0x12>;
 		clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
 		clock-names = "csi_mclk";
-/* Disabled CLKO2, since VAR-SOM-MX8M-MINI camera expansion board uses
- * its own oscillator. Enable CLK02 if your design requires it
- */
-#if 0
-		assigned-clocks = <&clk IMX8MP_CLK_CLKO1>;
-		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-		assigned-clock-rates = <24000000>;
-#endif
-
 		csi_id = <0>;
 		mclk = <24000000>;
 		mclk_source = <0>;
@@ -330,11 +321,6 @@
 	                MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x19 /* CAM_RST */
 			MX8MP_IOMUXC_GPIO1_IO08__GPIO1_IO08		0x140 /* CAM_OPT */
 			MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01		0x19 /* CAM_TRIGGER */
-#if 0
-			MX8MP_IOMUXC_ECSPI2_MOSI__GPIO5_IO11		0x19 /* CAM_SYNC */
-			MX8MP_IOMUXC_ECSPI2_MISO__GPIO5_IO12		0x19 /* CAM_PWR */
-			MX8MP_IOMUXC_SAI1_RXD3__GPIO4_IO05		0x19 /* CAM_BUF */
-#endif
 			MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL			0x400001c2
 			MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA			0x400001c2
 			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD				0x40000010
