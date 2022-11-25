@@ -489,20 +489,6 @@
 	status = "disabled";
 };
 
-&ecspi2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_ecspi2>;
-	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-	status = "okay";
-
-	spidev@0 {
-		compatible = "var,spidev";
-		reg = <0>;
-		spi-max-frequency = <12000000>;
-		status = "okay";
-	};
-};
-
 &gpio1 {
 	cam_buf_hog {
 		gpio-hog;
@@ -518,6 +504,7 @@
 
 	pinctrl_hog: hoggrp {
 		fsl,pins = <
+	                MX8MP_IOMUXC_GPIO5_IO13__GPIO5_IO13		0x19 /* ON_HOLD */
 	                MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x19 /* CAM_RST */
 			MX8MP_IOMUXC_GPIO1_IO08__GPIO1_IO08		0x140 /* CAM_OPT */
 			MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01		0x19 /* CAM_TRIGGER */
