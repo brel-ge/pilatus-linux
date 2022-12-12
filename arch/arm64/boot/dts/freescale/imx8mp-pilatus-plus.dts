@@ -221,14 +221,6 @@
 	status = "okay";
 };
 
-&usb_dwc3_0 {
-	dr_mode = "otg";
-	hnp-disable;
-	srp-disable;
-	adp-disable;
-	extcon = <&extcon_ptn5150>;
-	status = "okay";
-};
 
 &usb3_phy1 {
 	fsl,phy-tx-preemp-amp-tune = <3>;
@@ -317,8 +309,8 @@
 
 	pinctrl_hog: hoggrp {
 		fsl,pins = <
-	                MX8MP_IOMUXC_GPIO5_IO13__GPIO5_IO13		0x19 /* ON_HOLD */
-	                MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x19 /* CAM_RST */
+			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13		0x19 /* ON_HOLD */
+			MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x19 /* CAM_RST */
 			MX8MP_IOMUXC_GPIO1_IO08__GPIO1_IO08		0x140 /* CAM_OPT */
 			MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01		0x19 /* CAM_TRIGGER */
 			MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL			0x400001c2
