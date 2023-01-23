@@ -105,38 +105,85 @@
 	pac193x@10 {
 		compatible = "microchip,pac1934";
 		reg = <0x10>;
-		samp-rate = <8>;
+		microchip,samp-rate =<64>;
 	        status = "okay";
 
 		ch1: channel@0 {
-		     uohms-shunt-res = <100000>;
-		     rail-name = "CAM";
-		     subsys-name = "display";
-		     channel_enabled;
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "CAM";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <1>;
 		};
 
 		ch2: channel@1 {
-		     uohms-shunt-res = <100000>;
-		     rail-name = "3V3";
-		     subsys-name = "display";
-		     channel_enabled;
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "3V3";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <2>;
 		};
 
 		ch3: channel@2 {
-		     uohms-shunt-res = <100000>;
-		     rail-name = "1V8";
-		     subsys-name = "display";
-		     channel_enabled;
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "1V8";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <3>;
 		};
 
 		ch4: channel@3 {
-		     uohms-shunt-res = <100000>;
-		     rail-name = "5V";
-		     subsys-name = "display";
-		     channel_enabled;
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "5V";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <4>;
 		};
 	};
 
+
+	pac195x@36 {
+		compatible = "microchip,pac1954_1";
+		reg = <0x36>;
+
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		microchip,samp-rate = "64";
+		status = "okay";
+
+		ch11: channel1@1 {
+		    reg = <0x1>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "CAM";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch12: channel2@2 {
+		    reg = <0x2>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "3V3";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch13: channel3@3 {
+		    reg = <0x3>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "1V8";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch14: channel4@4 {
+		    reg = <0x4>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "5V0";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+	};
 
 
 };
