@@ -84,6 +84,14 @@ config POWER_RESET_GEMINI_POWEROFF
 	  This driver supports turning off the Cortina Gemini SoC.
 	  Select this if you're building a kernel with Gemini SoC support.
 
+config POWER_HOLD_GPIO
+	bool "GPIO hold driver"
+	depends on OF_GPIO
+	help
+	  This driver supports holding a gpio line until the system shuts doem.
+	  If your board needs a GPIO high/low to hold, say Y and
+	  create a binding in your devicetree.
+
 config POWER_RESET_GPIO
 	bool "GPIO power-off driver"
 	depends on OF_GPIO
