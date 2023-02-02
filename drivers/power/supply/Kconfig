@@ -403,6 +403,14 @@ config BATTERY_MAX1721X
 	  Say Y here to enable support for the MAX17211/MAX17215 standalone
 	  battery gas-gauge.
 
+config BATTERY_MAX1726X
+	tristate "Maxim MAX17260 Fuel Gauge"
+	depends on I2C
+	select REGMAP_I2C
+	help
+	  MAX17260 is fuel-gauge systems for lithium-ion (Li+) batteries
+	  in handheld and portable equipment.
+
 config BATTERY_Z2
 	tristate "Z2 battery driver"
 	depends on I2C && MACH_ZIPIT2
