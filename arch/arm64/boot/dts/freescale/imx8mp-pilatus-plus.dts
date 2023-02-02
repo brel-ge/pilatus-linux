@@ -35,6 +35,13 @@
 			  1800000 1>;
 	};
 
+  gpio_hold: gpio-hold {
+    compatible = "gpio-hold";
+	  pinctrl-names = "default";
+	  pinctrl-0 = <&pinctrl_hold>;
+    gpio = <&gpio4 26 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+  };
 
 	backlight: backlight {
 		compatible = "pwm-backlight";
