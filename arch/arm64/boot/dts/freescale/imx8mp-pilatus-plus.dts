@@ -37,10 +37,10 @@
 
   gpio_hold: gpio-hold {
     compatible = "gpio-hold";
-	  pinctrl-names = "default";
-	  pinctrl-0 = <&pinctrl_hold>;
+    pinctrl-names = "default";
+    pinctrl-0 = <&pinctrl_hold>;
     gpio = <&gpio4 26 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+    status = "okay";
   };
 
 	backlight: backlight {
@@ -186,6 +186,41 @@
 	sda-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 
+
+  max1726x: max1726x@36 {
+		status              = "okay";
+		reg                 = <0x36>; // MINIQUSB I2C ADDR=1, SIZE=0
+
+		pinctrl-0 = <&pinctrl_fuel_gauge>;
+		interrupt-parent    = <&gpio4>;
+		interrupts 	    = <23 IRQ_TYPE_EDGE_FALLING>;
+	};
+
+	bq25895: charger@6a {
+		compatible = "ti,bq25895";
+		reg = <0x6a>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_charger_in>;
+		interrupt-parent = <&gpio4>;
+		interrupts = <24 IRQ_TYPE_EDGE_FALLING>;
+		/* phys = <&usb3_phy0>; */
+    ti,battery-regulation-voltage = <4208000>;
+		ti,charge-current = <3500000>;
+		// 7.8Ah * 0.02C = 156mA -> 192 = 128 + 64
+		// register allows only 64mA steps
+		ti,termination-current = <128000>;
+		ti,precharge-current = <128000>;
+		ti,minimum-sys-voltage = <3600000>;
+		ti,boost-voltage = <5510000>;
+		ti,boost-max-current = <2400000>;
+		// VREG_ACTUAL = VREG + min(ICHRG_ACTUAL x BATCOMP, VCLAMP)
+		ti,ir-compensation-resistor = <60000>;// 60 mOhm
+		ti,ir-compensation-voltage = <210000>;// 3.5A * 0.06ohm = 0.21
+
+		ti,use-ilim-pin;
+		ti,thermal-regulation-threshold = <120>;
+	};
+
 	pac195x@1f {
 		compatible = "microchip,pac1954_1";
 		reg = <0x1f>;
@@ -231,40 +266,6 @@
 		    microchip,vsense-mode = <0>;
 		    microchip,accumulation-mode = <0>;
 		};
-	};
-
-  max1726x: max1726x@36 {
-		status              = "okay";
-		reg                 = <0x36>; // MINIQUSB I2C ADDR=1, SIZE=0
-
-		pinctrl-0 = <&pinctrl_fuel_gauge>;
-		interrupt-parent    = <&gpio4>;
-		interrupts 	    = <23 IRQ_TYPE_EDGE_FALLING>;
-	};
-
-	bq25895: charger@6a {
-		compatible = "ti,bq25895", "ti,bq25890";
-		reg = <0x6a>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_charger_in>;
-		interrupt-parent = <&gpio4>;
-		interrupts = <24 IRQ_TYPE_EDGE_FALLING>;
-		/* phys = <&usb3_phy0>; */
-    ti,battery-regulation-voltage = <4208000>;
-		ti,charge-current = <3500000>;
-		// 7.8Ah * 0.02C = 156mA -> 192 = 128 + 64
-		// register allows only 64mA steps
-		ti,termination-current = <128000>;
-		ti,precharge-current = <128000>;
-		ti,minimum-sys-voltage = <3600000>;
-		ti,boost-voltage = <5510000>;
-		ti,boost-max-current = <2400000>;
-		// VREG_ACTUAL = VREG + min(ICHRG_ACTUAL x BATCOMP, VCLAMP)
-		ti,ir-compensation-resistor = <60000>;// 60 mOhm
-		ti,ir-compensation-voltage = <210000>;// 3.5A * 0.06ohm = 0.21
-
-		ti,use-ilim-pin;
-		ti,thermal-regulation-threshold = <120>;
 	};
 };
 
