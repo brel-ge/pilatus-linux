@@ -39,9 +39,9 @@
 
 &i2c4 {
 	/* Capacitive touch controller */
-	touchscreen@5d	 {
+	touchscreen@14	 {
 		compatible = "goodix,gt9271";
-		reg = <0x5d>;
+		reg = <0x14>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_captouch>;
 		interrupt-parent = <&gpio5>;
