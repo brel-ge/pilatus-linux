@@ -63,6 +63,10 @@
 	};
 };
 
+&snvs_rtc {
+	status = "disabled";
+};
+
 &aud2htx {
 	status = "okay";
 };
