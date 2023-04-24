@@ -467,15 +467,6 @@
 	status = "disabled";
 };
 
-&gpio1 {
-	cam_buf_hog {
-		gpio-hog;
-		gpios = <6 0>;
-		output-low;
-		line-name = "cam_buf";
-	};
-};
-
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
@@ -485,7 +476,8 @@
 			MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01		0x19 /* CAM_ON Dev-Kit */
 			MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x19 /* CAM_ON 1350 */
 			MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11		0x19 /* LOOP_RUN */
-			MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05		0x19 /* FPD_PDB */
+      MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05		0x19 /* FPD_PDB */
+			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x19 /* 100 DegreeC */
 			MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21		0x19 /* #SLEEP */
 			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13		0x19 /* #PB_KEY */
 			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD				0x40000010
