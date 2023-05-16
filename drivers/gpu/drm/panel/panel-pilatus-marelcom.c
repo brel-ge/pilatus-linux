@@ -398,9 +398,9 @@ struct rad_platform_data {
 
 static const struct drm_display_mode default_mode = {
 	.hdisplay    = 800,
-	.hsync_start = 800 + 20,
-	.hsync_end   = 800 + 20 + 20,
-	.htotal	     = 800 + 20 + 20 + 40,
+	.hsync_start = 800 + 40,
+	.hsync_end   = 800 + 40 + 20,
+	.htotal	     = 800 + 40 + 20 + 20,
 	.vdisplay    = 1280,
 	.vsync_start = 1280 + 20,
 	.vsync_end   = 1280 + 20 + 4,
