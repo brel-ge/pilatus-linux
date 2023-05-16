@@ -38,6 +38,18 @@
 	status = "disabled";
 };
 
+&i2c4 {
+	touchscreen@41 {
+		compatible = "ilitek,ili251x";
+		reg = <0x41>;
+		pinctrl-0 = <&pinctrl_captouch>;
+		interrupt-parent = <&gpio5>;
+		interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+    touchscreen-swapped-x-y;
+    touchscreen-inverted-y;
+	};
+};
+
 
 &iomuxc {
 	pinctrl_captouch: captouchgrp {
