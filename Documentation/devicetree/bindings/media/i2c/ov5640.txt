@@ -17,6 +17,10 @@ Optional Properties:
 	    Documentation/devicetree/bindings/media/video-interfaces.txt,
 	    valid values are 0 (sensor mounted upright) and 180 (sensor
 	    mounted upside down).
+- legacy-revision: select initial settings for the original legacy sensor
+		revision instead of the default 1B revision (current since 2022)
+		Note: Omnivision provides no means for software to distinguish
+		between the two revisions
 
 The device node must contain one 'port' child node for its digital output
 video port, in accordance with the video interface bindings defined in
