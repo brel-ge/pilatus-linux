@@ -139,7 +139,11 @@ struct imx_rproc {
 	/* For i.MX System Manager based systems */
 	u32				flags;
 	u32				startup_delay;
+	phys_addr_t			m_core_ddr_addr;
+	size_t				m_core_ddr_size;
 };
+
+static int imx_rproc_setup_ddr_boot(struct rproc *rproc);
 
 static const struct imx_rproc_att imx_rproc_att_imx95_m7[] = {
 	/* dev addr , sys addr  , size	    , flags */
@@ -367,6 +371,10 @@ static int imx_rproc_arm_smc_start(struct rproc *rproc)
 	struct arm_smccc_res res;
 	int ret;
 
+	ret = imx_rproc_setup_ddr_boot(rproc);
+	if (ret)
+		return ret;
+
 	ret = clk_prepare_enable(priv->clk_audio);
 	if (ret)
 		dev_err(priv->dev, "Failed to enable audio clk!\n");
@@ -380,6 +388,11 @@ static int imx_rproc_mmio_start(struct rproc *rproc)
 {
 	struct imx_rproc *priv = rproc->priv;
 	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
+	int ret;
+
+	ret = imx_rproc_setup_ddr_boot(rproc);
+	if (ret)
+		return ret;
 
 	if (priv->gpr)
 		return regmap_clear_bits(priv->gpr, dcfg->gpr_reg, dcfg->gpr_wait);
@@ -598,6 +611,42 @@ static void *imx_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *i
 	return va;
 }
 
+static int imx_rproc_setup_ddr_boot(struct rproc *rproc)
+{
+	struct imx_rproc *priv = rproc->priv;
+	void __iomem *ddr;
+	void __iomem *tcml;
+	u32 vectors[2];
+	u64 bootaddr = rproc->bootaddr;
+
+	if (!(priv->dcfg->flags & IMX_RPROC_NEED_DDR_BOOT) ||
+	    priv->m_core_ddr_size < sizeof(vectors))
+		return 0;
+
+	if (bootaddr < priv->m_core_ddr_addr ||
+	    bootaddr - priv->m_core_ddr_addr >
+		priv->m_core_ddr_size - sizeof(vectors))
+		return 0;
+
+	ddr = (__force void __iomem *)imx_rproc_da_to_va(rproc,
+							 priv->m_core_ddr_addr,
+							 sizeof(vectors), NULL);
+	tcml = (__force void __iomem *)imx_rproc_da_to_va(rproc, 0,
+							  sizeof(vectors), NULL);
+	if (!ddr || !tcml) {
+		dev_err(priv->dev, "failed to map DDR boot vectors\n");
+		return -ENOMEM;
+	}
+
+	memcpy_fromio(vectors, ddr, sizeof(vectors));
+	memcpy_toio(tcml, vectors, sizeof(vectors));
+
+	dev_info(priv->dev, "copied DDR boot vectors from %pa to TCML\n",
+		 &priv->m_core_ddr_addr);
+
+	return 0;
+}
+
 static int imx_rproc_mem_alloc(struct rproc *rproc,
 			       struct rproc_mem_entry *mem)
 {
@@ -712,6 +761,14 @@ static int imx_rproc_prepare(struct rproc *rproc)
 		} else {
 			of_node_put(it.node);
 			return -ENOMEM;
+		}
+
+		/* Get M4/M7 DDR address from device tree. */
+		if (of_node_name_eq(it.node, "m4") ||
+		    of_node_name_eq(it.node, "m7") ||
+		    of_node_name_eq(it.node, "m_core")) {
+			priv->m_core_ddr_addr = rmem->base;
+			priv->m_core_ddr_size = rmem->size;
 		}
 
 		rproc_add_carveout(rproc, mem);
@@ -1478,14 +1535,14 @@ static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mn_mmio = {
 	.att		= imx_rproc_att_imx8mn,
 	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mn),
 	.ops		= &imx_rproc_ops_mmio,
-	.flags		= IMX_RPROC_NEED_CLKS,
+	.flags		= IMX_RPROC_NEED_CLKS | IMX_RPROC_NEED_DDR_BOOT,
 };
 
 static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mn = {
 	.att		= imx_rproc_att_imx8mn,
 	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mn),
 	.ops		= &imx_rproc_ops_arm_smc,
-	.flags		= IMX_RPROC_NEED_CLKS,
+	.flags		= IMX_RPROC_NEED_CLKS | IMX_RPROC_NEED_DDR_BOOT,
 };
 
 static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mq = {
@@ -1496,7 +1553,7 @@ static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mq = {
 	.att		= imx_rproc_att_imx8mq,
 	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mq),
 	.ops		= &imx_rproc_ops_mmio,
-	.flags		= IMX_RPROC_NEED_CLKS,
+	.flags		= IMX_RPROC_NEED_CLKS | IMX_RPROC_NEED_DDR_BOOT,
 };
 
 static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qm = {
