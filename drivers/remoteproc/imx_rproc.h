@@ -33,6 +33,7 @@ enum imx_rproc_method {
 /* dcfg flags */
 #define IMX_RPROC_NEED_SYSTEM_OFF	BIT(0)
 #define IMX_RPROC_NEED_CLKS		BIT(1)
+#define IMX_RPROC_NEED_DDR_BOOT		BIT(2)
 
 struct imx_rproc_plat_ops {
 	int (*start)(struct rproc *rproc);
