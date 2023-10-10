@@ -398,14 +398,14 @@ struct rad_platform_data {
 
 static const struct drm_display_mode default_mode = {
 	.hdisplay    = 800,
-	.hsync_start = 800 + 40,
-	.hsync_end   = 800 + 40 + 20,
-	.htotal	     = 800 + 40 + 20 + 20,
+	.hsync_start = 800 + 18,
+	.hsync_end   = 800 + 18 + 18,
+	.htotal      = 800 + 18 + 18 + 18,
 	.vdisplay    = 1280,
-	.vsync_start = 1280 + 20,
-	.vsync_end   = 1280 + 20 + 4,
-	.vtotal	     = 1280 + 20 + 4 + 20,
-	.clock	     = 70000,
+	.vsync_start = 1280 + 10,
+	.vsync_end   = 1280 + 10 + 4,
+	.vtotal      = 1280 + 10 + 4 + 20,
+	.clock       = 71000,
 	.width_mm    = 135,
 	.height_mm   = 217,
 	.flags = DRM_MODE_FLAG_NHSYNC |
@@ -493,7 +493,6 @@ static int pilatus_real_panel_enable(struct pilatus_panel *panel)
 {
 	struct mipi_dsi_device *dsi = panel->dsi;
 	struct device *dev = &dsi->dev;
-	u8 dsi_mode;
 	int color_format = color_format_from_dsi_format(dsi->format);
 	int ret;
 
@@ -502,16 +501,11 @@ static int pilatus_real_panel_enable(struct pilatus_panel *panel)
 
 	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
 
-        ret = init_sequence(dsi);
+	ret = init_sequence(dsi);
 	if (ret < 0) {
 		dev_err(dev, "Failed to send init sequence (%d)\n", ret);
 		goto fail;
 	}
-
-	/* Select User Command Set table (CMD1) */
-	ret = mipi_dsi_generic_write(dsi, (u8[]){ WRMAUCCTR, 0x00 }, 2);
-	if (ret < 0)
-		goto fail;
 
 	/* Software reset */
 	ret = mipi_dsi_dcs_soft_reset(dsi);
@@ -522,25 +516,6 @@ static int pilatus_real_panel_enable(struct pilatus_panel *panel)
 
 	usleep_range(15000, 17000);
 
-	/* Set DSI mode */
-	dsi_mode = (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) ? 0x0B : 0x00;
-	ret = mipi_dsi_generic_write(dsi, (u8[]){ 0xC2, dsi_mode }, 2);
-	if (ret < 0) {
-		dev_err(dev, "Failed to set DSI mode (%d)\n", ret);
-		goto fail;
-	}
-	/* Set tear ON */
-	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-	if (ret < 0) {
-		dev_err(dev, "Failed to set tear ON (%d)\n", ret);
-		goto fail;
-	}
-	/* Set tear scanline */
-	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x380);
-	if (ret < 0) {
-		dev_err(dev, "Failed to set tear scanline (%d)\n", ret);
-		goto fail;
-	}
 	/* Set pixel format */
 	ret = mipi_dsi_dcs_set_pixel_format(dsi, color_format);
 	dev_dbg(dev, "Interface color format set to 0x%x\n", color_format);
@@ -558,6 +533,7 @@ static int pilatus_real_panel_enable(struct pilatus_panel *panel)
 	//usleep_range(5000, 7000);
 	msleep(120);
         ret = init_sequence1(dsi);
+	ret = init_sequence1(dsi);
 	if (ret < 0) {
 		dev_err(dev, "Failed to send init sequence 1 (%d)\n", ret);
 		goto fail;
