@@ -44,7 +44,7 @@
 		reg = <0x41>;
 		pinctrl-0 = <&pinctrl_captouch>;
 		interrupt-parent = <&gpio5>;
-		interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
     touchscreen-swapped-x-y;
     touchscreen-inverted-y;
 	};
