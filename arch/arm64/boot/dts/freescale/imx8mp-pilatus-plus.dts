@@ -126,40 +126,6 @@
 		};
 	};
 
-	pac193x@10 {
-		compatible = "microchip,pac1934";
-		reg = <0x10>;
-		microchip,samp-rate =<64>;
-	        status = "okay";
-
-		ch1: channel@0 {
-		     microchip,uohms-shunt-res = <100000>;
-		     microchip,rail-name = "CAM";
-		     microchip,channel-enabled;
-                     microchip,channel-index = <1>;
-		};
-
-		ch2: channel@1 {
-		     microchip,uohms-shunt-res = <100000>;
-		     microchip,rail-name = "3V3";
-		     microchip,channel-enabled;
-                     microchip,channel-index = <2>;
-		};
-
-		ch3: channel@2 {
-		     microchip,uohms-shunt-res = <100000>;
-		     microchip,rail-name = "1V8";
-		     microchip,channel-enabled;
-                     microchip,channel-index = <3>;
-		};
-
-		ch4: channel@3 {
-		     microchip,uohms-shunt-res = <100000>;
-		     microchip,rail-name = "5V";
-		     microchip,channel-enabled;
-                     microchip,channel-index = <4>;
-		};
-	};
 
 };
 
@@ -189,6 +155,12 @@
 	scl-gpios = <&gpio3 26 GPIO_ACTIVE_HIGH>;
 	sda-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
 	status = "okay";
+
+  ina226: ina226@40 {
+		compatible = "ti,ina226";
+		reg = <0x40>;
+    shunt-resistor = <100000>;
+  };
 
 
   max1726x: max1726x@36 {
@@ -225,6 +197,41 @@
 		ti,thermal-regulation-threshold = <120>;
 	};
 
+	pac193x@10 {
+		compatible = "microchip,pac1934";
+		reg = <0x10>;
+		microchip,samp-rate =<64>;
+	        status = "okay";
+
+		ch1: channel@0 {
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "CAM";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <1>;
+		};
+
+		ch2: channel@1 {
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "1V8";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <2>;
+		};
+
+		ch3: channel@2 {
+		     microchip,uohms-shunt-res = <100000>;
+		     microchip,rail-name = "3V3";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <3>;
+		};
+
+		ch4: channel@3 {
+		     microchip,uohms-shunt-res = <620000>;
+		     microchip,rail-name = "LED";
+		     microchip,channel-enabled;
+                     microchip,channel-index = <4>;
+		};
+	};
+
 	pac195x@1f {
 		compatible = "microchip,pac1954_1";
 		reg = <0x1f>;
@@ -247,7 +254,7 @@
 		ch12: channel2@2 {
 		    reg = <0x2>;
 		    microchip,uohms-shunt-res = <100000>;
-		    microchip,rail-name = "3V3";
+		    microchip,rail-name = "1V8";
 		    microchip,vbus-mode = <0>;
 		    microchip,vsense-mode = <0>;
 		    microchip,accumulation-mode = <0>;
@@ -256,7 +263,7 @@
 		ch13: channel3@3 {
 		    reg = <0x3>;
 		    microchip,uohms-shunt-res = <100000>;
-		    microchip,rail-name = "1V8";
+		    microchip,rail-name = "3V3";
 		    microchip,vbus-mode = <0>;
 		    microchip,vsense-mode = <0>;
 		    microchip,accumulation-mode = <0>;
@@ -264,8 +271,8 @@
 
 		ch14: channel4@4 {
 		    reg = <0x4>;
-		    microchip,uohms-shunt-res = <100000>;
-		    microchip,rail-name = "5V0";
+		    microchip,uohms-shunt-res = <620000>;
+		    microchip,rail-name = "LED";
 		    microchip,vbus-mode = <0>;
 		    microchip,vsense-mode = <0>;
 		    microchip,accumulation-mode = <0>;
