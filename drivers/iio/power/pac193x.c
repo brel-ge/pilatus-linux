@@ -2068,7 +2068,7 @@ static int pac193x_probe(struct i2c_client *client,
 	return ret;
 }
 
-static int pac193x_remove(struct i2c_client *client)
+static void pac193x_remove(struct i2c_client *client)
 {
 	int ret = 0;
 	struct iio_dev *indio_dev = dev_get_drvdata(&client->dev);
@@ -2080,7 +2080,7 @@ static int pac193x_remove(struct i2c_client *client)
 		dev_err(&client->dev,
 			"%s - cannot delete the forced readout timer\n",
 			__func__);
-		return ret;
+		return;
 	}
 	if (chip_info->wq_chip != NULL) {
 		cancel_work_sync(&chip_info->work_chip_rfsh);
@@ -2089,7 +2089,6 @@ static int pac193x_remove(struct i2c_client *client)
 	}
 	kfree(chip_info->pac193x_info.attrs->attrs);
 	kfree(chip_info->pac193x_info.attrs);
-	return ret;
 }
 
 static const struct i2c_device_id pac193x_id[] = { { "pac1934", pac1934 },
