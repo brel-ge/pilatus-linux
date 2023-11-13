@@ -12,6 +12,7 @@
 #include <linux/of.h>
 #include <linux/of_platform.h>
 #include <linux/regulator/consumer.h>
+#include <linux/media-bus-format.h>
 
 #include <video/mipi_display.h>
 #include <video/of_videomode.h>
@@ -802,7 +803,7 @@ static int pilatus_panel_probe(struct mipi_dsi_device *dsi)
 	return ret;
 }
 
-static int pilatus_panel_remove(struct mipi_dsi_device *dsi)
+static void pilatus_panel_remove(struct mipi_dsi_device *dsi)
 {
 	struct pilatus_panel *rad = mipi_dsi_get_drvdata(dsi);
 	struct device *dev = &dsi->dev;
@@ -813,8 +814,6 @@ static int pilatus_panel_remove(struct mipi_dsi_device *dsi)
 		dev_err(dev, "Failed to detach from host (%d)\n", ret);
 
 	drm_panel_remove(&rad->panel);
-
-	return 0;
 }
 
 static void pilatus_panel_shutdown(struct mipi_dsi_device *dsi)

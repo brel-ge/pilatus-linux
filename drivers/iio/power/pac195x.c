@@ -2240,7 +2240,7 @@ static int pac194x5x_prep_iio_channels(struct pac194x5x_chip_info *chip_info,
 	return 0;
 }
 
-static int pac194x5x_remove(struct i2c_client *client)
+static void pac194x5x_remove(struct i2c_client *client)
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(&client->dev);
@@ -2252,7 +2252,7 @@ static int pac194x5x_remove(struct i2c_client *client)
 		dev_err(&client->dev,
 			"%s - cannot delete the forced readout timer\n",
 			__func__);
-		return ret;
+		return;
 	}
 	if (chip_info->wq_chip) {
 		cancel_work_sync(&chip_info->work_chip_rfsh);
@@ -2261,8 +2261,6 @@ static int pac194x5x_remove(struct i2c_client *client)
 	}
 	kfree(chip_info->pac194x5x_info.attrs->attrs);
 	kfree(chip_info->pac194x5x_info.attrs);
-
-	return 0;
 }
 
 static int pac194x5x_probe(struct i2c_client *client, const struct i2c_device_id *id)
