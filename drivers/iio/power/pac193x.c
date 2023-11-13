@@ -373,7 +373,7 @@ static int pac193x_retrieve_data(struct pac193x_chip_info *chip_info,
 				 u32 wait_time);
 static int pac193x_reg_snapshot(struct pac193x_chip_info *chip_info,
 				bool do_rfsh, bool refresh_v, u32 wait_time);
-static int pac193x_remove(struct i2c_client *client);
+static void pac193x_remove(struct i2c_client *client);
 static const char *pac193x_get_of_match_entry(struct i2c_client *client);
 
 #define PAC193x_VPOWER_ACC_CHANNEL(_index, _address)                           \
