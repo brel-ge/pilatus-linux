@@ -628,7 +628,7 @@ out_media:
  * @param client            struct i2c_client *
  * @return  Error code indicating success or failure
  */
-static int eiger_stub_remove(struct i2c_client *client)
+static void eiger_stub_remove(struct i2c_client *client)
 {
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct eiger_stub *sensor = to_eiger_stub(client);
@@ -637,7 +637,6 @@ static int eiger_stub_remove(struct i2c_client *client)
 	media_entity_cleanup(&sensor->sd.entity);
 	//v4l2_ctrl_handler_free(&sensor->ctrls.handler);
 	mutex_destroy(&sensor->lock);
-	return 0;
 }
 
 
