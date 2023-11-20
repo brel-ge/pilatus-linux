@@ -803,8 +803,7 @@ source "drivers/media/i2c/m5mols/Kconfig"
 
 config VIDEO_EIGER_STUB
 	tristate "Eiger camera support using"
-	depends on OF
-	depends on GPIOLIB && VIDEO_V4L2 && I2C
+	depends on VIDEO_DEV && I2C
 	select MEDIA_CONTROLLER
 	select VIDEO_V4L2_SUBDEV_API
 	select V4L2_FWNODE
