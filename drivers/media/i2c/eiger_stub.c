@@ -45,7 +45,8 @@ enum eiger_stub_mode {
 	eiger_stub_mode_1_1_800 = 1,
 	eiger_stub_mode_16_9_1920 = 2,
 	eiger_stub_mode_16_10_1280 = 3,
-	eiger_stub_mode_MAX = 0,
+	eiger_stub_mode_4_3_648 = 4,
+	eiger_stub_mode_MAX = 4,
 	eiger_stub_mode_INIT = 0xff, /*only for sensor init*/
 };
 
@@ -91,6 +92,7 @@ struct eiger_stub_res eiger_stub_valid_res[] = {
 	[eiger_stub_mode_1_1_800] = { 800, 800 },
 	[eiger_stub_mode_16_9_1920] = { 1920, 1080 },
 	[eiger_stub_mode_16_10_1280] = { 1280, 800 },
+	[eiger_stub_mode_4_3_648] = { 648, 488 },
 };
 
 
