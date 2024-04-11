@@ -65,6 +65,10 @@
 
 };
 
+&eqos {
+	status = "disabled";
+};
+
 &snvs_rtc {
 	status = "disabled";
 };
