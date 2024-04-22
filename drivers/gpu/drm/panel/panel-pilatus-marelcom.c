@@ -391,6 +391,8 @@ struct pilatus_panel {
 	bool enabled;
 
 	const struct rad_platform_data *pdata;
+
+	bool no_init;
 };
 
 struct rad_platform_data {
@@ -501,6 +503,12 @@ static int pilatus_real_panel_enable(struct pilatus_panel *panel)
 		return 0;
 
 	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+
+	if (panel->no_init) {
+		panel->enabled = true;
+		dev_info(dev, "Pilatus panel enable skipped");
+		return 0;
+	}
 
 	ret = init_sequence(dsi);
 	if (ret < 0) {
@@ -729,6 +737,8 @@ static int pilatus_panel_probe(struct mipi_dsi_device *dsi)
 
 	dsi->format = MIPI_DSI_FMT_RGB888;
 	dsi->mode_flags = MIPI_DSI_MODE_VIDEO_HSE | MIPI_DSI_MODE_NO_EOT_PACKET;
+
+	panel->no_init = of_property_read_bool(np, "no-init");
 
 	ret = of_property_read_u32(np, "video-mode", &video_mode);
 	if (!ret) {
