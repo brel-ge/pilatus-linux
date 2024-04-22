@@ -21,6 +21,7 @@
 					 * 1: non-burst mode with sync event
 					 * 2: non-burst mode with sync pulse
 					 */
+		no-init;
 		status = "okay";
 	};
 };
