@@ -39,16 +39,6 @@
 
 &i2c4 {
 	/* Capacitive touch controller */
-	touchscreen@14	 {
-		compatible = "goodix,gt9271";
-		reg = <0x14>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_captouch>;
-		interrupt-parent = <&gpio5>;
-		interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-		irq-gpios = <&gpio5 3 GPIO_ACTIVE_HIGH>;
-	};
-
 	touchscreen@5d	 {
 		compatible = "goodix,gt9271";
 		reg = <0x5d>;
@@ -57,6 +47,8 @@
 		interrupt-parent = <&gpio5>;
 		interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
 		irq-gpios = <&gpio5 3 GPIO_ACTIVE_HIGH>;
+    touchscreen-swapped-x-y = "true";
+    touchscreen-inverted-y = "true";
 	};
 };
 
