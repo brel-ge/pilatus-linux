@@ -1012,8 +1012,8 @@ static void fbcon_init(struct vc_data *vc, bool init)
 
 	info = fbcon_info_from_console(vc->vc_num);
 
-	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
-		logo_shown = FBCON_LOGO_DONTSHOW;
+	// if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
+	// 	logo_shown = FBCON_LOGO_DONTSHOW;
 
 	if (vc != svc || logo_shown == FBCON_LOGO_DONTSHOW ||
 	    (info->fix.type == FB_TYPE_TEXT))
