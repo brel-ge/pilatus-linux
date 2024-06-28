@@ -1,0 +1,176 @@
+
+/*
+ * Copyright 2024 Bruetsch Elektronik AG
+ */
+
+#include "imx8mp-pilatus-plus.dts"
+
+&eqos {
+	status = "okay";
+};
+
+
+&i2c5 {
+
+	pca9554@20 {
+		compatible = "nxp,pca9554";
+		reg = <0x20>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	pca9554@21 {
+		compatible = "nxp,pca9554";
+		reg = <0x21>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	pca9554@22 {
+		compatible = "nxp,pca9554";
+		reg = <0x22>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	pac195x@11 {
+		compatible = "microchip,pac1954_1";
+		reg = <0x11>;
+
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		microchip,samp-rate = "64";
+		status = "okay";
+
+		ch21: channel1@1 {
+		    reg = <0x1>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "3V3_EXT";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch22: channel2@2 {
+		    reg = <0x2>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "PMIC_3V3";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch23: channel3@3 {
+		    reg = <0x3>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "5V0_EXT";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch24: channel4@4 {
+		    reg = <0x4>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "1V8_EXT";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+	};
+
+	pac195x@12 {
+		compatible = "microchip,pac1954_1";
+		reg = <0x12>;
+
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		microchip,samp-rate = "64";
+		status = "okay";
+
+		ch31: channel1@1 {
+		    reg = <0x1>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "RECT-5V0";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch32: channel2@2 {
+		    reg = <0x2>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "V_SYS";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch33: channel3@3 {
+		    reg = <0x3>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "BL";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch34: channel4@4 {
+		    reg = <0x4>;
+		    microchip,uohms-shunt-res = <0>;
+		    microchip,rail-name = "FLOAT";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+	};
+
+	pac195x@13 {
+		compatible = "microchip,pac1954_1";
+		reg = <0x13>;
+
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		microchip,samp-rate = "64";
+		status = "okay";
+
+		ch41: channel1@1 {
+		    reg = <0x1>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "12V_DUT";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch42: channel2@2 {
+		    reg = <0x2>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "SENSE2";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch43: channel3@3 {
+		    reg = <0x3>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "SENS3";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+
+		ch44: channel4@4 {
+		    reg = <0x4>;
+		    microchip,uohms-shunt-res = <100000>;
+		    microchip,rail-name = "SENS4";
+		    microchip,vbus-mode = <0>;
+		    microchip,vsense-mode = <0>;
+		    microchip,accumulation-mode = <0>;
+		};
+	};
+};
