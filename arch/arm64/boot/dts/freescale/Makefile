@@ -148,7 +148,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it626
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus.dtb \
 			  imx8mp-pilatus-plus-variscite.dtb \
 			  imx8mp-pilatus-plus-inputech.dtb \
-			  imx8mp-pilatus-plus-marelcom.dtb
+			  imx8mp-pilatus-plus-marelcom.dtb \
+			  imx8mp-pilatus-plus-test1350.dtb \
+			  imx8mp-pilatus-plus-dev-marelcom.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-ab2.dtb
