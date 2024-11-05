@@ -26,8 +26,8 @@ static void gpio_hold_pm_power_off(void)
 {
 	BUG_ON(!hold_gpio);
 
-	mdelay(delay);
 	gpiod_set_value_cansleep(hold_gpio, 0);
+	mdelay(delay);
 }
 
 static int gpio_hold_probe(struct platform_device *pdev)
@@ -57,7 +57,9 @@ static int gpio_hold_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id of_gpio_hold_match[] = {
-	{ .compatible = "gpio-hold", },
+	{
+		.compatible = "gpio-hold",
+	},
 	{},
 };
 MODULE_DEVICE_TABLE(of, of_gpio_hold_match);
