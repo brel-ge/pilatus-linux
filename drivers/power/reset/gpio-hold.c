@@ -20,7 +20,7 @@
  * since pm_power_off itself is global.
  */
 static struct gpio_desc *hold_gpio;
-static u32 delay = 100;
+static u32 delay = 300;
 
 static void gpio_hold_pm_power_off(void)
 {
