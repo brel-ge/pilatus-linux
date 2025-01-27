@@ -26,6 +26,12 @@ install:
   cp arch/arm64/boot/dts/freescale/imx8mp-pilatus-plus-dev-marelcom.dtb /tftpboot
   cp arch/arm64/boot/dts/freescale/imx8mp-pilatus-plus-test1350.dtb /tftpboot
 
+docker_mrproper:
+  {{ YOCTO_ENV }} make mrproper
+
+mrproper:
+  {{ DOCKER_RUN }} just docker_mrproper
+
 
 install_modules:
   sudo make INSTALL_MOD_PATH=/exports/var-som-plus modules_install 
