@@ -352,7 +352,6 @@ static int eiger_stub_get_fmt(struct v4l2_subdev *sd,
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct eiger_stub *sensor = to_eiger_stub(client);
-	struct device *dev = &client->dev;
 
 	struct v4l2_mbus_framefmt *fmt;
 
@@ -662,7 +661,7 @@ static struct i2c_driver eiger_stub_i2c_driver = {
 		  .of_match_table = eiger_stub_dt_ids,
 		  },
 	.id_table = eiger_stub_id,
-	.probe_new  = eiger_stub_probe,
+	.probe  = eiger_stub_probe,
 	.remove = eiger_stub_remove,
 };
 

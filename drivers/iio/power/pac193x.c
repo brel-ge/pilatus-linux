@@ -207,6 +207,8 @@
 	 (ch1_bidv ? 0x08 : 0) | (ch2_bidv ? 0x04 : 0) |                       \
 	 (ch3_bidv ? 0x02 : 0) | (ch4_bidv ? 0x01 : 0))
 
+static const struct i2c_device_id pac193x_id[];
+
 enum pac193x_ids { pac1934, pac1933, pac1932, pac1931 };
 
 enum pac193x_samps {
@@ -1940,9 +1942,9 @@ static int pac193x_prep_custom_attributes(struct pac193x_chip_info *chip_info,
 	return 0;
 }
 
-static int pac193x_probe(struct i2c_client *client,
-			 const struct i2c_device_id *id)
+static int pac193x_probe(struct i2c_client *client)
 {
+  const struct i2c_device_id *id = i2c_match_id(pac193x_id, client);
 	struct pac193x_chip_info *chip_info;
 	struct iio_dev *indio_dev;
 	const char *name = NULL;
