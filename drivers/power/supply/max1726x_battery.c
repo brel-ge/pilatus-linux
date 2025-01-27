@@ -971,8 +971,7 @@ static const struct power_supply_desc max1726x_fg_desc = {
 	.get_property   = max1726x_get_property,
 };
 
-static int max1726x_probe(struct i2c_client *client,
-                const struct i2c_device_id *id)
+static int max1726x_probe(struct i2c_client *client)
 {
     /*struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);*/
     struct max1726x_priv *priv;

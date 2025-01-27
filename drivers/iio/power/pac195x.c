@@ -2263,8 +2263,9 @@ static void pac194x5x_remove(struct i2c_client *client)
 	kfree(chip_info->pac194x5x_info.attrs);
 }
 
-static int pac194x5x_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int pac194x5x_probe(struct i2c_client *client)
 {
+	const struct i2c_device_id *id = i2c_match_id(pac194x5x_id, client);
 	struct pac194x5x_chip_info *chip_info;
 	struct iio_dev *indio_dev;
 	const char *name = NULL;
