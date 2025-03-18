@@ -93,7 +93,7 @@
 		ch31: channel1@1 {
 		    reg = <0x1>;
 		    microchip,uohms-shunt-res = <0>;
-		    microchip,rail-name = "RECT-5V0";
+		    microchip,rail-name = "-5V0";
 		    microchip,vbus-mode = <0>;
 		    microchip,vsense-mode = <0>;
 		    microchip,accumulation-mode = <0>;
