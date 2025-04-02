@@ -5,6 +5,21 @@
 
 #include "imx8mp-pilatus-plus.dts"
 
+/delete-node/ &gpio_hold;
+
+/ {
+	
+model = "Test-1350";
+
+stop_battery: gpio-hold {
+  compatible = "gpio-hold";
+  gpio = <&ic200 0 GPIO_ACTIVE_HIGH>;
+  status = "okay";
+};
+
+};
+
+
 &eqos {
 	status = "okay";
 };
@@ -19,7 +34,7 @@
 		#gpio-cells = <2>;
 	};
 
-	pca9554@21 {
+	ic200: pca9554@21 {
 		compatible = "nxp,pca9554";
 		reg = <0x21>;
 		gpio-controller;
