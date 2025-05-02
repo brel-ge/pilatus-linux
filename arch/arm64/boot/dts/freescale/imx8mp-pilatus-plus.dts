@@ -307,7 +307,7 @@
     /* Option 1/2/3 */
     designcap   = /bits/ 16 <0x3CF0>; /* 7800 mAh * 0.5 */
     ichgterm    = /bits/ 16 <0x0334>;  /* 128 / 0.15625 = 820 = 0x334 */
-    vempty      = /bits/ 16 <0xAA61>; /* VE 3400 mV; VR 3880 mV*/
+    vempty      = /bits/ 16 <0xAF61>; /* VE 3500 mV; VR 3880 mV*/
     vcharge     = <4200>; /* mV */
 
     /* Option 2/3 */
