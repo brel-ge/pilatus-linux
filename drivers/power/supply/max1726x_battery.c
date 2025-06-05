@@ -641,7 +641,7 @@ static int max1726x_init(struct max1726x_priv *priv)
         return -ENODEV;
 
     dev_info(priv->dev, "IC Version: 0x%04x\n", fgrev);
-
+  #if 0
     /* Step 0: Check for POR */
     /* Skip load model if POR bit is cleared */
     regmap_read(regmap, MAX1726X_STATUS_REG, &reg);
@@ -650,6 +650,8 @@ static int max1726x_init(struct max1726x_priv *priv)
         dev_info(priv->dev, "POR is not set. Skipping initialization...\n");
         return 0;
     }
+#endif
+    dev_info(priv->dev, "Special build, reset settings...\n");
 
     /* Step 1: Check if FStat.DNR == 0 */
     ret = max1726x_poll_flag_clear(regmap, MAX1726X_FSTAT_REG, MAX1726X_FSTAT_DNR, 500);
