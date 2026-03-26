@@ -950,10 +950,6 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
 	bool pmic_trim = false;
 	int ret;
 
-	if (!i2c->irq) {
-		dev_warn(&i2c->dev, "No IRQ configured?\n");
-	}
-
 	pca9450 = devm_kzalloc(&i2c->dev, sizeof(struct pca9450), GFP_KERNEL);
 	if (!pca9450)
 		return -ENOMEM;
@@ -1049,11 +1045,18 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
 		}
 	}
 
+<<<<<<< HEAD
 	if(i2c->irq)
 	{
 		ret = devm_request_threaded_irq(pca9450->dev, pca9450->irq, NULL,
 						pca9450_irq_handler,
 						(IRQF_TRIGGER_FALLING | IRQF_ONESHOT),
+=======
+	if (pca9450->irq) {
+		ret = devm_request_threaded_irq(pca9450->dev, pca9450->irq, NULL,
+						pca9450_irq_handler,
+						(IRQF_TRIGGER_LOW | IRQF_ONESHOT),
+>>>>>>> stable/linux-6.6.y
 						"pca9450-irq", pca9450);
 		if (ret != 0) {
 			dev_err(pca9450->dev, "Failed to request IRQ: %d\n",
