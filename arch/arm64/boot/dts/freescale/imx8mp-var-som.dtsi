@@ -340,8 +340,9 @@
 	uart-has-rtscts;
 	status = "okay";
 
-	bluetooth {
+	bluetooth_iw61x: bluetooth {
 		compatible = "nxp,88w8987-bt";
+		status = "okay";
 	};
 };
 
