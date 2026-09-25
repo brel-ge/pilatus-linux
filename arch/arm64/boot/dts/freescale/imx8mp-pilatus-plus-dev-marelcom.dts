@@ -1,0 +1,12 @@
+
+/*
+ * Copyright 2024 Bruetsch Elektronik AG
+ */
+
+#include "imx8mp-pilatus-plus-marelcom.dts"
+
+&eqos {
+	status = "okay";
+};
+
+

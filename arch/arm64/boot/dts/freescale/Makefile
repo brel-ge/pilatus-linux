@@ -372,6 +372,14 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-dart-wbe-sonata.dtb \
 	imx8mp-var-dart-wbe-sonata-basler-isp0-m7.dtb \
 	imx8mp-var-dart-wbe-sonata-basler-isp0.dtb \
 	imx8mp-var-dart-wbe-sonata-m7.dtb
+
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus.dtb
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-variscite.dtb
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-inputech.dtb
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-marelcom.dtb
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-test1350.dtb
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-pilatus-plus-dev-marelcom.dtb
+
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-som-symphony.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-som-symphony-2nd-ov5640-m7.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-som-symphony-2nd-ov5640.dtb
