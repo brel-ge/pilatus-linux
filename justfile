@@ -1,6 +1,7 @@
-YOCTO_ENV := ". /opt/fslc-xwayland/pilatus-sdk-4.1/environment-setup-armv8a-fslc-linux &&"
-DOCKER_RUN := "docker run --rm -u " + `id -u` + ":" + `id -g` + " -v " + `pwd` + ":/workspace -w /workspace pilatus-build"
-DOCKER_IT := "docker run --rm -u " + `id -u` + ":" + `id -g` + " -v " + `pwd` + ":/workspace -w /workspace -it pilatus-build"
+YOCTO_ENV := ". /opt/fslc-xwayland/pilatus-sdk-wrynose/environment-setup-cortexa53-crypto-fsl-linux && "
+DOCKER_IMAGE := "gitlabregistry.brel.ch/24_ge-team/3583_pilatus/850_pilatus_sw/build_container:wrynose"
+DOCKER_RUN := "docker run --rm -u " + `id -u` + ":" + `id -g` + " -v " + `pwd` + ":/workspace -w /workspace " + DOCKER_IMAGE
+DOCKER_IT := "docker run --rm -u " + `id -u` + ":" + `id -g` + " -v " + `pwd` + ":/workspace -w /workspace -it " + DOCKER_IMAGE
 MAKE := "make -j 16 HOSTCC=x86_64-fslcsdk-linux-gcc"
 
 # Default target
