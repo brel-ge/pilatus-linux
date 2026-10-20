@@ -2007,6 +2007,7 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
 {
 	struct enetc_ndev_priv *priv = netdev_priv(ndev);
 	int cpu = smp_processor_id();
+	struct skb_shared_info *shinfo;
 	struct enetc_bdr *tx_ring;
 	int xdp_tx_frm_cnt = 0;
 	int xdp_tx_bd_cnt, k;
@@ -2026,6 +2027,12 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
 	prefetchw(ENETC_TXBD(*tx_ring, tx_ring->next_to_use));
 
 	for (k = 0; k < num_frames; k++) {
+		if (xdp_frame_has_frags(frames[k])) {
+			shinfo = xdp_get_shared_info_from_frame(frames[k]);
+			if (unlikely((shinfo->nr_frags + 1) > ENETC_MAX_SKB_FRAGS))
+				break;
+		}
+
 		if (unlikely(enetc_xdp_frame_to_xdp_tx_swbd(tx_ring, frames[k],
 							    &xdp_tx_bd_cnt))) {
 			tx_ring->stats.xdp_tx_drops++;
@@ -2763,7 +2770,8 @@ static void enetc_xsk_descs_to_tx_ring(struct enetc_bdr *tx_ring,
 			first_txbd = txbd;
 			frm_len = tx_swbd->len;
 
-			meta = xsk_buff_get_metadata(pool, xsk_descs[j].addr);
+			meta = xsk_buff_get_metadata(pool, xsk_descs[j].addr,
+						     xsk_descs[j].options);
 			if (!meta)
 				goto no_metadata_req;
 
@@ -2772,7 +2780,8 @@ static void enetc_xsk_descs_to_tx_ring(struct enetc_bdr *tx_ring,
 			meta_req.index = &i;
 			meta_req.txbd_update = false;
 
-			xsk_tx_metadata_request(meta, &enetc_xsk_tx_metadata_ops,
+			xsk_tx_metadata_request(pool, &meta,
+						&enetc_xsk_tx_metadata_ops,
 						&meta_req);
 			xsk_tx_metadata_to_compl(meta, &tx_swbd->xsk_meta);
 
@@ -3672,11 +3681,16 @@ static void enetc_disable_txbdr(struct enetc_hw *hw, struct enetc_bdr *rx_ring)
 
 static void enetc_disable_rx_bdrs(struct enetc_ndev_priv *priv)
 {
-	struct enetc_hw *hw = &priv->si->hw;
+	struct enetc_si *si = priv->si;
+	struct enetc_hw *hw = &si->hw;
 	int i;
+
+	spin_lock(&si->gen_lock);
 
 	for (i = 0; i < priv->num_rx_rings; i++)
 		enetc_disable_rxbdr(hw, priv->rx_ring[i]);
+
+	spin_unlock(&si->gen_lock);
 }
 
 static void enetc_disable_tx_bdrs(struct enetc_ndev_priv *priv)

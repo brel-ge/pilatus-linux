@@ -82,16 +82,16 @@ int afs_open_socket(struct afs_net *net)
 	if (ret < 0)
 		pr_err("Couldn't create RxGK CM key: %d\n", ret);
 
-	ret = kernel_bind(socket, (struct sockaddr *) &srx, sizeof(srx));
+	ret = kernel_bind(socket, (struct sockaddr_unsized *) &srx, sizeof(srx));
 	if (ret == -EADDRINUSE) {
 		srx.transport.sin6.sin6_port = 0;
-		ret = kernel_bind(socket, (struct sockaddr *) &srx, sizeof(srx));
+		ret = kernel_bind(socket, (struct sockaddr_unsized *) &srx, sizeof(srx));
 	}
 	if (ret < 0)
 		goto error_2;
 
 	srx.srx_service = YFS_CM_SERVICE;
-	ret = kernel_bind(socket, (struct sockaddr *) &srx, sizeof(srx));
+	ret = kernel_bind(socket, (struct sockaddr_unsized *) &srx, sizeof(srx));
 	if (ret < 0)
 		goto error_2;
 
@@ -128,8 +128,14 @@ void afs_close_socket(struct afs_net *net)
 	_enter("");
 
 	cancel_work_sync(&net->charge_preallocation_work);
+	cancel_work_sync(&net->rx_oob_work);
+	/* Future work items should now see ->live is false. */
+
 	kernel_listen(net->socket, 0);
+
+	/* Make sure work items are no longer running. */
 	flush_workqueue(afs_async_calls);
+	cancel_work_sync(&net->charge_preallocation_work);
 
 	if (net->spare_incoming_call) {
 		afs_put_call(net->spare_incoming_call);
@@ -143,6 +149,7 @@ void afs_close_socket(struct afs_net *net)
 
 	kernel_sock_shutdown(net->socket, SHUT_RDWR);
 	flush_workqueue(afs_async_calls);
+	cancel_work_sync(&net->rx_oob_work);
 	net->socket->sk->sk_user_data = NULL;
 	sock_release(net->socket);
 	key_put(net->fs_cm_token_key);
@@ -984,5 +991,6 @@ static void afs_rx_notify_oob(struct sock *sk, struct sk_buff *oob)
 {
 	struct afs_net *net = sk->sk_user_data;
 
-	schedule_work(&net->rx_oob_work);
+	if (READ_ONCE(net->live))
+		queue_work(afs_wq, &net->rx_oob_work);
 }
