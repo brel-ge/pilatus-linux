@@ -3,12 +3,16 @@ DOCKER_IMAGE := "gitlabregistry.brel.ch/24_ge-team/3583_pilatus/850_pilatus_sw/b
 DOCKER_RUN := "docker run --rm -u " + `id -u` + ":" + `id -g` + " -v " + `pwd` + ":/workspace -w /workspace " + DOCKER_IMAGE
 DOCKER_IT := "docker run --rm -u " + `id -u` + ":" + `id -g` + " -v " + `pwd` + ":/workspace -w /workspace -it " + DOCKER_IMAGE
 MAKE := "make -j 16 HOSTCC=x86_64-fslcsdk-linux-gcc"
+# Build only what Pilatus ships: a full `make` builds every freescale DTB, and that list is
+# too long for one shell argument (Kbuild dtbs-list fails with "Argument list too long").
+PILATUS_DTBS := `cd arch/arm64/boot/dts && ls freescale/imx8mp-pilatus-plus-*.dts | sed 's/\.dts$/.dtb/' | tr '\n' ' '`
+TARGETS := "Image.gz modules " + PILATUS_DTBS
 
 # Default target
 default: build
 
 docker_build:
-  {{ YOCTO_ENV }} make -j 16
+  {{ YOCTO_ENV }} make -j 16 {{ TARGETS }}
 
 build:
   {{ DOCKER_RUN }} just docker_build
