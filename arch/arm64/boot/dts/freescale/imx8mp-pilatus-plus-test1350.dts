@@ -3,6 +3,7 @@
  * Copyright 2024 Bruetsch Elektronik AG
  */
 
+#include <dt-bindings/leds/common.h>
 #include "imx8mp-pilatus-plus.dts"
 
 /delete-node/ &gpio_hold;
@@ -22,6 +23,27 @@ stop_battery: gpio-hold {
 
 &eqos {
 	status = "okay";
+};
+
+&ethphy0 {
+	leds {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		led@0 {
+			reg = <0>;
+			color = <LED_COLOR_ID_YELLOW>;
+			function = LED_FUNCTION_LAN;
+			linux,default-trigger = "netdev";
+		};
+
+		led@1 {
+			reg = <1>;
+			color = <LED_COLOR_ID_GREEN>;
+			function = LED_FUNCTION_LAN;
+			linux,default-trigger = "netdev";
+		};
+	};
 };
 
 
