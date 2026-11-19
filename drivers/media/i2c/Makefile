@@ -175,3 +175,5 @@ obj-$(CONFIG_VIDEO_WM8775) += wm8775.o
 obj-$(CONFIG_VIDEO_AP1302)     += ap1302.o
 obj-$(CONFIG_VIDEO_OX05B1S) += ox05b1s/
 obj-$(CONFIG_VIDEO_EIGER_STUB) += eiger_stub.o
+obj-$(CONFIG_VIDEO_OAH0428) += oah0428.o
+obj-$(CONFIG_VIDEO_OAH0428_VVS) += oah0428-vvs.o

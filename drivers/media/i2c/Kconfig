@@ -857,6 +857,24 @@ config VIDEO_EIGER_STUB
 	help
 	  If you plan to use the Eiger Camera with your system, say Y here.
 
+config VIDEO_OAH0428
+	tristate "OAH0428 camera support using"
+	depends on VIDEO_DEV && I2C
+	select MEDIA_CONTROLLER
+	select VIDEO_V4L2_SUBDEV_API
+	select V4L2_FWNODE
+	help
+	  If you plan to use the OAH0428 sensor with your system, say Y here.
+
+config VIDEO_OAH0428_VVS
+	tristate "OAH0428 camera support using ISP"
+	depends on VIDEO_DEV && I2C
+	select MEDIA_CONTROLLER
+	select VIDEO_V4L2_SUBDEV_API
+	select V4L2_FWNODE
+	help
+	  If you plan to use the OAH0428 sensor with your system, say Y here.
+
 endif
 
 menu "Camera ISPs"
