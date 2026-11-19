@@ -68,6 +68,16 @@
 
 };
 
+/*
+ * NVCC_SD2 (LDO5) also powers the SD2_WP pad, which is GPIO2_IO20 and
+ * switches the Ethernet PHY supply (reg_phy_supply). Without a consumer
+ * the regulator core turns LDO5 off 30s after boot, cutting the PHY.
+ */
+&ldo5 {
+	regulator-always-on;
+	regulator-boot-on;
+};
+
 &eqos {
 	status = "disabled";
 };
