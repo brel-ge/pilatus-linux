@@ -30,8 +30,10 @@ docker_configure_imx8_var_defconfig:
 configure_imx8_var_defconfig:
   {{ DOCKER_RUN }} just docker_configure_imx8_var_defconfig
 
-install:
+# Kernel and modules always go out together, so the rootfs never has a stale module dir
+install: install_modules
   cp arch/arm64/boot/Image.gz /tftpboot/Image-pilatus-plus.gz
+  cp arch/arm64/boot/dts/freescale/imx8mp-pilatus-plus-symphony.dtb /tftpboot
   cp arch/arm64/boot/dts/freescale/imx8mp-pilatus-plus-variscite.dtb /tftpboot
   cp arch/arm64/boot/dts/freescale/imx8mp-pilatus-plus-inputech.dtb /tftpboot
   cp arch/arm64/boot/dts/freescale/imx8mp-pilatus-plus-marelcom.dtb /tftpboot
@@ -50,5 +52,21 @@ docker_menuconfig:
 menuconfig:
   {{ DOCKER_IT }} just docker_menuconfig
 
+# NFS rootfs exports booted with the TFTP kernel; each needs the matching modules
+NFS_ROOTFS := "/exports/var-som-plus /exports/var-som-plus-devply"
+
+docker_install_modules:
+  rm -rf .modules-install
+  {{ YOCTO_ENV }} make INSTALL_MOD_PATH=/workspace/.modules-install modules_install
+
 install_modules:
-  sudo make INSTALL_MOD_PATH=/exports/var-som-plus modules_install 
+  {{ DOCKER_RUN }} just docker_install_modules
+  # depmod is missing in the docker image, run it on the host
+  depmod -b .modules-install `cat include/config/kernel.release`
+  rm -f .modules-install/lib/modules/*/build
+  # copy into lib/modules, as lib is a symlink to usr/lib in usrmerge rootfs
+  for rootfs in {{ NFS_ROOTFS }}; do \
+    sudo rm -rf $rootfs/lib/modules/`cat include/config/kernel.release` && \
+    sudo mkdir -p $rootfs/lib/modules && \
+    sudo cp -a --no-preserve=ownership .modules-install/lib/modules/. $rootfs/lib/modules/ || exit 1; \
+  done
